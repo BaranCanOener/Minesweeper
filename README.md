@@ -1,5 +1,5 @@
-# Minesweeper
-A simple game of Minesweeper in Python &amp; using pygame.
+# PySweeper
+A simple game of minesweeper in Python &amp; using pygame.
 
 The size of the minefield and the number of mines can me modified via the global variables:
 width = 10
