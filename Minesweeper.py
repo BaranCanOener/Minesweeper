@@ -21,7 +21,7 @@ cellPixelWH = 50
 borderWH = 2
 width = 10
 height = 10
-mineCount = 20
+mineCount = 15
 
 
 """END OF GLOBAL VARIABLES"""
@@ -49,7 +49,7 @@ class Minesweeper:
     def __init__(self, width, height, mineCount):
         self.width = width
         self.height = height
-        self.mineCount = min(mineCount, width*height)
+        self.mineCount = min(mineCount, width*height-1)
         self.flagCount = self.mineCount
         for x in range(width):
             self.field.append([])
@@ -93,7 +93,7 @@ class Minesweeper:
     #Resets the game state
     def resetField(self):
         self.flagCount = self.mineCount
-        self.uncoveredCells = self.width*self.height
+        self.uncoveredCells = 0
         self.gameOver = False
         self.gameWon = False
         self.firstClick = True
@@ -110,7 +110,7 @@ class Minesweeper:
         while (minesToGenerate):
             x = randrange(self.width)
             y = randrange(self.height)
-            if (x != safeX) and (y != safeY) and (self.field[x][y].mine == False):
+            if ((x != safeX) or (y != safeY)) and (self.field[x][y].mine == False):
                 self.field[x][y].mine = True
                 minesToGenerate -= 1
     
@@ -180,14 +180,13 @@ class Minesweeper:
 def drawMS(screen, font, ms):
     for x in range(ms.width):
         for y in range(ms.height):
-            if ms.field[x][y].clicked:
-                if ms.field[x][y].mine:
-                    pygame.draw.rect(screen, red, (borderWH+(cellPixelWH+borderWH)*x,borderWH+(cellPixelWH+borderWH)*y,cellPixelWH,cellPixelWH), 0) 
-                else:
-                    pygame.draw.rect(screen, white, (borderWH+(cellPixelWH+borderWH)*x,borderWH+(cellPixelWH+borderWH)*y,cellPixelWH,cellPixelWH), 0) 
-                    font.render(str(ms.field[x][y].neighbourMines), True, blue)
-                    srf = font.render(str(ms.field[x][y].neighbourMines), True, blue)
-                    screen.blit(srf, ((borderWH+(cellPixelWH+borderWH)*x+cellPixelWH//2.5,borderWH+(cellPixelWH+borderWH)*y+cellPixelWH//4)))
+            if ((ms.field[x][y].clicked) or (ms.gameOver)) and (ms.field[x][y].mine):
+                pygame.draw.rect(screen, red, (borderWH+(cellPixelWH+borderWH)*x,borderWH+(cellPixelWH+borderWH)*y,cellPixelWH,cellPixelWH), 0) 
+            elif (ms.field[x][y].clicked) and (not ms.field[x][y].mine):
+                pygame.draw.rect(screen, white, (borderWH+(cellPixelWH+borderWH)*x,borderWH+(cellPixelWH+borderWH)*y,cellPixelWH,cellPixelWH), 0) 
+                font.render(str(ms.field[x][y].neighbourMines), True, blue)
+                srf = font.render(str(ms.field[x][y].neighbourMines), True, blue)
+                screen.blit(srf, ((borderWH+(cellPixelWH+borderWH)*x+cellPixelWH//2.5,borderWH+(cellPixelWH+borderWH)*y+cellPixelWH//4)))
             else:
                 pygame.draw.rect(screen, black, (borderWH+(cellPixelWH+borderWH)*x,borderWH+(cellPixelWH+borderWH)*y,cellPixelWH,cellPixelWH), 0) 
                 if (ms.field[x][y].marked):
