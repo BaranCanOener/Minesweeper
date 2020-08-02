@@ -8,4 +8,4 @@ mineCount = 40.
 
 The game also contains an engine to solve it (using simple deductions and probability estimates).
 
-![Minesweeper](https://github.com/BaranCanOener/Minesweeper/blob/master/minesweeper.PNG)
+![Minesweeper](https://github.com/BaranCanOener/Minesweeper/blob/master/pysweeper.PNG)
